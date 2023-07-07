@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in</title>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: rgb(243, 243, 243);
+        }
+
+        div {
+            background-color: white;
+            width: 60%;
+            margin: auto;
+            padding: 10%;
+        }
+
+        input,
+        button {
+            width: 100%;
+            font-size: 20px;
+            display: block;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <form>
+            <input type="email" placeholder="E-Mail" id="email">
+            <input type="password" placeholder="password" id="password">
+            <input type="submit" value="Sign in">
+        </form>
+
+    </div>
+</body>
+
+</html>
+
+<script>
+
+    let form = document.querySelector('form');
+    // retrieving data
+    let userData = JSON.parse(localStorage.getItem("userData")) || [];
+
+    form.addEventListener('submit', function (e) {
+
+        e.preventDefault();
+        let data = {
+            email: form.email.value, //email is inside form id is email so email.value
+            password: form.password.value, //similarly we have the id is password so we add password.value
+        }
+        if (checkSignin(data.email, data.password) === true) {
+            localStorage.setItem("signin", JSON.stringify(data));
+            alert("Sign in Successful")
+            window.location.href = "index.html";
+        }
+        else {
+            alert("Wrong Username or Password")
+            //how to redirect : 
+            // it is done by window.location.href  = "Page name that is index.html here"
+            // window.location.href = "index.html"; //don't do something like this because here it will not store in the local storage write in line no 66
+        }
+    })
+    // for sign in the two value we need is email and password in order to check i need to add filter
+    function checkSignin(email, password) {
+        // i have to take same user data array yaad kro signup wala 
+        let filter = userData.filter(function (element) {
+            return element.email === email && element.password === password;
+        })
+        // previously we had checked only with email that the email is unique or not and here email and password
+        if (filter.length > 0) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+</script>
