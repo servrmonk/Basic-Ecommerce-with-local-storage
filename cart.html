@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart Page</title>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+        }
+
+        #products {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: auto;
+            gap: 10px 20px;
+        }
+
+        #products>div>img {
+            width: 100%;
+
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="products">
+        <!-- All Product data will be appended here -->
+    </div>
+</body>
+
+</html>
+
+<script>
+    let productsCont = document.getElementById("products");
+    let cartLS = JSON.parse(localStorage.getItem("cart-page")) || [];
+    let totalPrice = 0;
+    // product se display product wala function chpkak do 
+
+    function displayProducts(data) {                         // data = []; data is an array
+        totalPrice = 0;//because after deletion price will added continously
+        productsCont.innerHTML = "";
+        data.forEach(function (element) {
+            totalPrice += +element.price; //converted from string to number
+            let product = document.createElement("div"); //product
+            let img = document.createElement("img");
+            img.src = element.img;
+
+
+            let name = document.createElement("h1");
+            name.textContent = element.name;
+
+            let catagory = document.createElement("p");
+            catagory.innerText = element.catagory;
+
+            let DeleteCart = document.createElement("button");
+            DeleteCart.innerText = "Delete";
+
+            DeleteCart.addEventListener("click", function () {
+                Delete(element.productID);
+
+            })
+            product.append(img, name, catagory, DeleteCart);
+            productsCont.append(product);
+        })
+        console.log(totalPrice);
+    }
+
+    displayProducts(cartLS);
+
+    function Delete(id){
+        console.log(id);
+        let deleted = cartLS.filter(function(el){
+            return el.productID != id;
+        })
+        // console.log(deleted);
+        cartLS = deleted;
+        localStorage.setItem("cart-page",JSON.stringify(cartLS));
+        displayProducts(cartLS);
+    }
+
+
+
+    /*
+    let arr = [a1,a2,a3,a4,a5];
+    let arr1 = arr.filter(function(el){
+        return el != a1;
+    })
+    // so arr1 will contain a2,a3,a4,a5 indirectly a1 is deleted or ignored, so we can be able to delete using filter we can also do this same thing using slice also 
+    // check filter.js
+
+    */
+
+
+
+</script>
